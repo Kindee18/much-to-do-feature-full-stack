@@ -1,0 +1,59 @@
+# Git
+.git
+.gitignore
+.github
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Build artifacts
+bin/
+dist/
+*.o
+*.a
+*.so
+
+# Testing
+*_test.go
+*.test
+coverage.out
+.coverage
+
+# Dependency
+vendor/
+
+# Documentation
+docs/
+*.md
+
+# Docker and Kubernetes
+Dockerfile
+docker-compose.yml
+kubernetes/
+.dockerignore
+
+# Node (frontend)
+Client/node_modules
+Client/dist
+Client/.env
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Misc
+*.pem
+*.key
+mongodb.key
+scripts/
+README.md
