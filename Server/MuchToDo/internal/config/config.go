@@ -1,9 +1,9 @@
 package config
 
 import (
-	"strings"
-
-	"github.com/spf13/viper"
+	"fmt"
+	"os"
+	"strconv"
 )
 
 // Config stores all configuration of the application.
@@ -23,62 +23,45 @@ type Config struct {
 	AllowedOrigins     []string `mapstructure:"ALLOWED_ORIGINS"`
 }
 
-// LoadConfig reads configuration from file or environment variables.
+// LoadConfig reads configuration from environment variables
 func LoadConfig(path string) (config Config, err error) {
-	viper.AddConfigPath(path)
-	viper.SetConfigName(".env")
-	viper.SetConfigType("env")
-
-	viper.AutomaticEnv()
-
-	// Set default values
-	viper.SetDefault("PORT", "8080")
-	viper.SetDefault("ENABLE_CACHE", false)
-	viper.SetDefault("JWT_EXPIRATION_HOURS", 72)
-	viper.SetDefault("COOKIE_DOMAINS", []string{"localhost"})
-	viper.SetDefault("SECURE_COOKIE", false)
-	viper.SetDefault("ALLOWED_ORIGINS", []string{"http://localhost:5173"})
-
-	err = viper.ReadInConfig()
-	if err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			return
-		}
+	fmt.Fprintf(os.Stderr, "==== CONFIG LOAD START: MONGO_URI env=%s
+", os.Getenv("MONGO_URI"))
+	config.ServerPort = os.Getenv("PORT")
+	if config.ServerPort == "" {
+		config.ServerPort = "8080"
 	}
-
-	err = viper.Unmarshal(&config)
-	if err != nil {
-		return
+	config.MongoURI = os.Getenv("MONGO_URI")
+	config.DBName = os.Getenv("DB_NAME")
+	if config.DBName == "" {
+		config.DBName = "much_todo_db"
 	}
-
-	// Manually handle comma-separated strings for slices if viper didn't split them
-	if allowedOrigins := viper.GetString("ALLOWED_ORIGINS"); allowedOrigins != "" {
-		parts := strings.Split(allowedOrigins, ",")
-		var cleaned []string
-		for _, p := range parts {
-			// Trim spaces and quotes
-			trimmed := strings.TrimSpace(p)
-			trimmed = strings.Trim(trimmed, "\"'")
-			if trimmed != "" {
-				cleaned = append(cleaned, trimmed)
-			}
-		}
-		config.AllowedOrigins = cleaned
+	config.LogLevel = os.Getenv("LOG_LEVEL")
+	if config.LogLevel == "" {
+		config.LogLevel = "INFO"
 	}
-
-	if cookieDomains := viper.GetString("COOKIE_DOMAINS"); cookieDomains != "" {
-		parts := strings.Split(cookieDomains, ",")
-		var cleaned []string
-		for _, p := range parts {
-			// Trim spaces and quotes
-			trimmed := strings.TrimSpace(p)
-			trimmed = strings.Trim(trimmed, "\"'")
-			if trimmed != "" {
-				cleaned = append(cleaned, trimmed)
-			}
-		}
-		config.CookieDomains = cleaned
+	config.LogFormat = os.Getenv("LOG_FORMAT")
+	if config.LogFormat == "" {
+		config.LogFormat = "json"
 	}
+	enableCacheStr := os.Getenv("ENABLE_CACHE")
+	if enableCacheStr != "" {
+		config.EnableCache, _ = strconv.ParseBool(enableCacheStr)
+	}
+	config.RedisAddr = os.Getenv("REDIS_ADDR")
+	if config.RedisAddr == "" {
+		config.RedisAddr = "localhost:6379"
+	}
+	config.JWTSecretKey = os.Getenv("JWT_SECRET_KEY")
+	if config.JWTSecretKey == "" {
+		config.JWTSecretKey = "your-super-secret-key-change-in-production"
+	}
+	config.JWTExpirationHours = 72
+	config.RedisPassword = os.Getenv("REDIS_PASSWORD")
+	config.SecureCookie = false
+	config.AllowedOrigins = []string{"http://localhost:5173"}
+	config.CookieDomains = []string{"localhost"}
 
+	fmt.Fprintf(os.Stderr, "DEBUG CONFIG: MONGO_URI=%s LOG_LEVEL=%s ENABLE_CACHE=%v\n", config.MongoURI, config.LogLevel, config.EnableCache)
 	return
 }

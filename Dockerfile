@@ -1,6 +1,6 @@
 # Multi-stage build for MuchToDo backend
 # Stage 1: Build
-FROM golang:1.23 AS builder
+FROM golang:1.25.1-alpine AS builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -21,7 +21,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/api/main.go
 FROM alpine:latest
 
 # Install necessary packages
-RUN apk --no-cache add ca-certificates wget
+RUN apk --no-cache add ca-certificates wget curl
 
 # Create a non-root user
 RUN addgroup -g 1000 appuser && \

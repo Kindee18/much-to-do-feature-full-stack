@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  namespace: muchtodo
+  namespace: much-todo
   labels:
     app: backend
 spec:
@@ -46,32 +46,11 @@ spec:
                   name: backend-configmap
                   key: log-format
             - name: MONGO_URI
-              value: "mongodb://$(MONGO_USER):$(MONGO_PASSWORD)@$(MONGO_HOST):$(MONGO_PORT)/?authSource=admin&replicaSet=$(MONGO_REPLICA_SET)&directConnection=true"
-            - name: MONGO_USER
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: mongo-username
-            - name: MONGO_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: mongo-password
-            - name: MONGO_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-configmap
-                  key: mongo-host
-            - name: MONGO_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-configmap
-                  key: mongo-port
-            - name: MONGO_REPLICA_SET
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-configmap
-                  key: mongo-replica-set
+              value: "mongodb://mongodb-service:27017/much_todo_db"
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: ""
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: ""
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
@@ -83,7 +62,7 @@ spec:
                   name: backend-configmap
                   key: enable-cache
             - name: REDIS_ADDR
-              value: "$(REDIS_HOST):$(REDIS_PORT)"
+              value: "redis-service:6379"
             - name: REDIS_HOST
               valueFrom:
                 configMapKeyRef:

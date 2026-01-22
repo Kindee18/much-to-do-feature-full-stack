@@ -57,11 +57,12 @@ func main() {
 	// This must be initialized before any other component that might log.
 	logger.InitLogger(cfg)
 	slog.Info("Logger initialized", "level", cfg.LogLevel, "format", cfg.LogFormat)
+	slog.Info("Loaded configuration", "mongoURI", cfg.MongoURI, "dbName", cfg.DBName)
 
 	// 2. Connect to Database
 	dbClient, err := database.ConnectMongo(cfg.MongoURI, cfg.DBName)
 	if err != nil {
-		slog.Error("could not connect to MongoDB", slog.Any("error", err))
+		slog.Error("could not connect to MongoDB", slog.String("mongoURI", cfg.MongoURI), slog.Any("error", err))
 		os.Exit(1)
 	}
 	defer func() {

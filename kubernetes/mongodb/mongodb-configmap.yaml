@@ -4,4 +4,4 @@ metadata:
   name: mongodb-configmap
   namespace: much-todo
 data:
-MONGO_INITDB_DATABASE: much_todo_db
+  MONGO_INITDB_DATABASE: much_todo_db

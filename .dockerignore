@@ -48,6 +48,10 @@ Client/.env
 
 # Environment
 .env
+
+# MongoDB keys and certificates
+*.key
+*.pem
 .env.local
 .env.*.local
 
