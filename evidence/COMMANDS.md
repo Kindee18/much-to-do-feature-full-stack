@@ -1,127 +1,105 @@
 # Evidence Collection Commands
 
+This document lists the commands used to build, deploy, and verify the MuchTodo application in the Linux environment.
+
 ## 1. Docker Build Evidence
 
-```powershell
-# Already completed - Image built successfully
-docker images much-to-do
-# Output: much-to-do   latest    279ca443291a   54.8MB
+```bash
+# Build the optimized multi-stage Docker image
+./scripts/docker-build.sh
+
+# Verify the image exists
+docker images muchtodo-backend
 ```
 
-## 2. Kubernetes Deployment Commands
+## 2. Docker Compose Evidence
+
+```bash
+# Run the application locally with MongoDB
+./scripts/docker-run.sh
+
+# Check running containers
+docker ps --filter "name=muchtodo"
+
+# Verify health check
+curl -i http://localhost:3000/health
+```
+
+## 3. Kubernetes Deployment Commands
 
 ### Create Kind Cluster
-
-```powershell
-$env:PATH += ";C:\Program Files\Docker\Docker\resources\bin"
-C:\kubectl\kind.exe create cluster --name much-todo-cluster
+```bash
+# Create cluster with ingress support
+./scripts/k8s-deploy.sh
 ```
 
-### Load Docker Image
+### Manual Deployment Steps (Reference)
+```bash
+# Deploy Namespace
+kubectl apply -f kubernetes/namespace.yaml
 
-```powershell
-C:\kubectl\kind.exe load docker-image much-to-do:latest --name much-todo-cluster
+# Deploy MongoDB
+kubectl apply -f kubernetes/mongodb/
+
+# Deploy Backend
+kubectl apply -f kubernetes/backend/
+
+# Deploy Ingress
+kubectl apply -f kubernetes/ingress.yaml
 ```
 
-### Deploy Namespace
-
-```powershell
-C:\kubectl\kubectl.exe apply -f kubernetes\namespace.yaml
-```
-
-### Deploy MongoDB
-
-```powershell
-C:\kubectl\kubectl.exe apply -f kubernetes\mongodb\mongodb-secret.yaml
-C:\kubectl\kubectl.exe apply -f kubernetes\mongodb\mongodb-configmap.yaml
-C:\kubectl\kubectl.exe apply -f kubernetes\mongodb\mongodb-pvc.yaml
-C:\kubectl\kubectl.exe apply -f kubernetes\mongodb\mongodb-deployment.yaml
-C:\kubectl\kubectl.exe apply -f kubernetes\mongodb\mongodb-service.yaml
-```
-
-### Deploy Backend
-
-```powershell
-C:\kubectl\kubectl.exe apply -f kubernetes\backend\backend-secret.yaml
-C:\kubectl\kubectl.exe apply -f kubernetes\backend\backend-configmap.yaml
-C:\kubectl\kubectl.exe apply -f kubernetes\backend\backend-sa.yaml
-C:\kubectl\kubectl.exe apply -f kubernetes\backend\backend-deployment.yaml
-C:\kubectl\kubectl.exe apply -f kubernetes\backend\backend-service.yaml
-```
-
-### Deploy Ingress
-
-```powershell
-C:\kubectl\kubectl.exe apply -f kubernetes\ingress.yaml
-```
-
-## 3. Verification Commands
+## 4. Verification Commands
 
 ### Check Pods
-
-```powershell
-C:\kubectl\kubectl.exe get pods -n much-todo
-C:\kubectl\kubectl.exe get pods -n much-todo -o wide
+```bash
+kubectl get pods -n muchtodo-ns
 ```
 
 ### Check Services
-
-```powershell
-C:\kubectl\kubectl.exe get svc -n much-todo
+```bash
+kubectl get svc -n muchtodo-ns
 ```
 
 ### Check Deployments
-
-```powershell
-C:\kubectl\kubectl.exe get deployments -n much-todo
+```bash
+kubectl get deployments -n muchtodo-ns
 ```
 
-### Check Events
-
-```powershell
-C:\kubectl\kubectl.exe get events -n much-todo
+### Check Ingress
+```bash
+kubectl get ingress -n muchtodo-ns
 ```
 
 ### View Logs
-
-```powershell
+```bash
 # Backend logs
-C:\kubectl\kubectl.exe logs -f deployment/backend -n much-todo
+kubectl logs -l app=backend -n muchtodo-ns
 
 # MongoDB logs
-C:\kubectl\kubectl.exe logs -f deployment/mongodb -n much-todo
+kubectl logs -l app=mongodb -n muchtodo-ns
 ```
 
-### Test Application
+### Test Application Accessibility
+```bash
+# Via Ingress (direct host access)
+curl -i http://localhost/health
 
-```powershell
-# Via NodePort
-curl http://localhost:8080/health
-
-# Via Port Forward
-C:\kubectl\kubectl.exe port-forward -n much-todo svc/backend 8080:8080
-curl http://localhost:8080/health
+# Via Port Forward (alternative)
+kubectl port-forward svc/backend 3000:80 -n muchtodo-ns
+curl -i http://localhost:3000/health
 ```
 
-## 4. Screenshots Needed
+## 5. Metadata and Context
+```bash
+# Check current context
+kubectl config current-context
 
-1. **Docker Build**: Terminal showing successful build with image size
-2. **Docker Images**: Output of `docker images` showing much-to-do:latest
-3. **Kind Cluster**: Output showing cluster creation success
-4. **Kubectl Context**: Output of `kubectl config current-context`
-5. **Namespace**: Output of `kubectl get namespace much-todo`
-6. **Pods Running**: `kubectl get pods -n much-todo` with all Running
-7. **Services**: `kubectl get svc -n much-todo` showing NodePort
-8. **Deployments**: `kubectl get deployments -n much-todo`
-9. **Health Check**: Browser or curl showing health endpoint response
-10. **Logs**: Sample of backend pod logs showing successful startup
+# Check cluster info
+kubectl cluster-info
+```
 
-## 5. Cleanup Commands
-
-```powershell
-# Delete namespace (removes all resources)
-C:\kubectl\kubectl.exe delete namespace much-todo
-
-# Delete cluster
-C:\kubectl\kind.exe delete cluster --name much-todo-cluster
+## 6. Cleanup Commands
+```bash
+# Use the cleanup script
+./scripts/k8s-cleanup.sh
 ```

@@ -1,0 +1,4 @@
+NAME                       READY   STATUS    RESTARTS      AGE
+backend-6cfbdd7d86-7fkxc   1/1     Running   4 (73s ago)   2m46s
+backend-6cfbdd7d86-lr5ft   1/1     Running   4 (67s ago)   2m46s
+mongodb-59bcdb77fc-sg6l9   1/1     Running   0             2m47s

@@ -1,50 +1,44 @@
-# Multi-stage build for MuchToDo backend
-# Stage 1: Build
-FROM golang:1.25.1-alpine AS builder
+# Build stage
+FROM golang:1.25-alpine AS builder
 
-# Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Copy go.mod and go.sum files
+# Copy dependency files first for better caching
 COPY Server/MuchToDo/go.mod Server/MuchToDo/go.sum ./
-
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
 RUN go mod download
 
-# Copy the source code into the container
-COPY Server/MuchToDo .
+# Copy source code
+COPY Server/MuchToDo/ .
 
-# Build the Go app
+# Build the application
 RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/api/main.go
 
-# Stage 2: Runtime
+# Final stage
 FROM alpine:latest
 
-# Install necessary packages
-RUN apk --no-cache add ca-certificates wget curl
+# Install basic utilities (using healthcheck required tools)
+RUN apk --no-cache add ca-certificates curl
 
-# Create a non-root user
+# Create non-root user for security
 RUN addgroup -g 1000 appuser && \
     adduser -D -u 1000 -G appuser appuser
 
-# Set the Current Working Directory inside the container
 WORKDIR /home/appuser
 
-# Copy the Pre-built binary file from the previous stage
+# Copy binary from builder
 COPY --from=builder /app/main .
 
-# Change ownership of the binary
+# Set ownership
 RUN chown appuser:appuser main
 
-# Switch to non-root user
 USER appuser
 
-# Expose port 8080 to the outside world
-EXPOSE 8080
+# Expose the application port
+EXPOSE 3000
 
-# Command to run the executable
+# Run the binary
 CMD ["./main"]
 
-# Health check
+# Health check on port 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+  CMD curl -f http://localhost:3000/health || exit 1

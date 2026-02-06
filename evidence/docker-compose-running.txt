@@ -1,0 +1,6 @@
+ID: 7f6a02283f6f, Names: muchtodo-cluster-control-plane, Status: Up 8 minutes
+ID: 6af55d98dbbe, Names: muchtodo-backend, Status: Up 11 minutes (healthy)
+ID: 15e7be44dd7e, Names: mongodb, Status: Up 11 minutes
+ID: 33ad1c8a6a8c, Names: mongo-express, Status: Up 30 minutes
+ID: 58fbd3286de7, Names: redis-commander, Status: Up 30 minutes (healthy)
+ID: 8bb4346cba26, Names: redis, Status: Up 30 minutes

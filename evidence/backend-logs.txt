@@ -1,0 +1,20 @@
+{"time":"2026-02-06T04:45:34.865465114Z","level":"INFO","msg":"Loaded configuration","mongoURI":"mongodb://root:example@mongodb:27017","dbName":"much_todo_db"}
+{"time":"2026-02-06T04:45:34.947062594Z","level":"INFO","msg":"Successfully connected to MongoDB."}
+{"time":"2026-02-06T04:45:34.947098107Z","level":"INFO","msg":"Caching is disabled."}
+{"time":"2026-02-06T04:45:34.948556329Z","level":"INFO","msg":"Caching is disabled. Skipping username preloading."}
+{"time":"2026-02-06T04:45:34.949129666Z","level":"INFO","msg":"Server starting","port":"3000"}
+[GIN] 2026/02/06 - 04:45:39 | 200 |     5.94768ms |      10.244.0.1 | GET      "/health"
+[GIN] 2026/02/06 - 04:45:44 | 200 |      588.06µs |      10.244.0.1 | GET      "/health"
+[GIN] 2026/02/06 - 04:45:49 | 200 |    1.682051ms |      10.244.0.1 | GET      "/health"
+[GIN] 2026/02/06 - 04:46:01 | 200 |     886.614µs |      10.244.0.1 | GET      "/health"
+[GIN] 2026/02/06 - 04:46:01 | 200 |    1.480381ms |      10.244.0.1 | GET      "/health"
+==== CONFIG LOAD START: MONGO_URI env=mongodb://root:example@mongodb:27017
+DEBUG CONFIG: MONGO_URI=mongodb://root:example@mongodb:27017 LOG_LEVEL=info ENABLE_CACHE=false
+{"time":"2026-02-06T04:45:47.716366941Z","level":"INFO","msg":"Logger initialized","level":"info","format":"json"}
+{"time":"2026-02-06T04:45:47.717323134Z","level":"INFO","msg":"Loaded configuration","mongoURI":"mongodb://root:example@mongodb:27017","dbName":"much_todo_db"}
+{"time":"2026-02-06T04:45:47.777701109Z","level":"INFO","msg":"Successfully connected to MongoDB."}
+{"time":"2026-02-06T04:45:47.777743323Z","level":"INFO","msg":"Caching is disabled."}
+{"time":"2026-02-06T04:45:47.777767688Z","level":"INFO","msg":"Caching is disabled. Skipping username preloading."}
+{"time":"2026-02-06T04:45:47.778277563Z","level":"INFO","msg":"Server starting","port":"3000"}
+[GIN] 2026/02/06 - 04:46:00 | 200 |     954.414µs |      10.244.0.1 | GET      "/health"
+[GIN] 2026/02/06 - 04:46:00 | 200 |    2.546749ms |      10.244.0.1 | GET      "/health"

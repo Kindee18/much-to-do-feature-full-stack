@@ -40,3 +40,15 @@ docker-compose.test.yaml
 mongodb.key
 mongo-keyfile
 
+# Binaries
+kubectl
+/bin/
+/scripts/verify-structure.sh
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+

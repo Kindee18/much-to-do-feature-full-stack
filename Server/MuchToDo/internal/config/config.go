@@ -25,8 +25,7 @@ type Config struct {
 
 // LoadConfig reads configuration from environment variables
 func LoadConfig(path string) (config Config, err error) {
-	fmt.Fprintf(os.Stderr, "==== CONFIG LOAD START: MONGO_URI env=%s
-", os.Getenv("MONGO_URI"))
+	fmt.Fprintf(os.Stderr, "==== CONFIG LOAD START: MONGO_URI env=%s\n", os.Getenv("MONGO_URI"))
 	config.ServerPort = os.Getenv("PORT")
 	if config.ServerPort == "" {
 		config.ServerPort = "8080"
