@@ -1,2 +1,2 @@
-NAME              CLASS    HOSTS   ADDRESS   PORTS   AGE
-backend-ingress   <none>   *                 80      2m28s
+NAME              CLASS    HOSTS   ADDRESS     PORTS   AGE
+backend-ingress   <none>   *       localhost   80      19m

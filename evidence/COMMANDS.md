@@ -103,3 +103,4 @@ kubectl cluster-info
 # Use the cleanup script
 ./scripts/k8s-cleanup.sh
 ```
+Evidence refreshed at Thu Feb 26 22:28:45 WAT 2026
