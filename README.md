@@ -63,7 +63,12 @@ kubectl port-forward svc/backend 3000:80 -n muchtodo-ns
 ```
 Then visit `http://localhost:3000/health`.
 
-### 4. Cleanup
+### 4. Interactive API Documentation (Swagger)
+The application serves interactive Swagger docs at:
+- **Kubernetes**: [http://localhost/swagger/index.html](http://localhost/swagger/index.html)
+- **Docker Compose**: [http://localhost:3000/swagger/index.html](http://localhost:3000/swagger/index.html)
+
+### 5. Cleanup
 To delete the Kind cluster and all associated resources:
 ```bash
 ./scripts/k8s-cleanup.sh
@@ -80,10 +85,13 @@ Specific evidence of the deployment and verification can be found in the `eviden
 - `docker-build-process.txt`: Docker build logs.
 - `docker-compose-running.txt`: Compose container status.
 - `docker-compose-response.txt`: App response via Docker Compose.
+- `docker-ps.txt`: Docker process status.
 - `kind-cluster-creation.txt`: Kind cluster status.
 - `k8s-deployments-running.txt`: Deployment status.
-- `k8s-pod-status.txt`: Multi-replica pod status.
+- `k8s-pods.txt`: Multi-replica pod status.
 - `k8s-services.txt`: Service configurations.
-- `k8s-ingress-status.txt`: Ingress configuration.
+- `k8s-ingress.txt`: Ingress configuration.
 - `k8s-ingress-accessibility.txt`: Accessibility verification (via Ingress).
 - `backend-logs.txt`: Kubernetes backend logs.
+- `health-check.json`: Raw JSON health response.
+- `COMMANDS.md`: Record of verification commands used.
