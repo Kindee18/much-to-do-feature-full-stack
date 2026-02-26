@@ -16,7 +16,7 @@ spec:
       containers:
         - name: backend
           image: muchtodo-backend:latest
-          imagePullPolicy: Never # Using local image for Kind
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
           envFrom:
